@@ -1,4 +1,5 @@
 from pygame import *
+
 init()
 class GameSprite (sprite.Sprite):
     def __init__(self ,x, y, w, h, picturename):
@@ -7,16 +8,21 @@ class GameSprite (sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+        
     def reset (self):
         window.blit(self.image, (self.rect.x,self.rect.y ))
+        
+        
 class Player(GameSprite):
     def __init__(self, x, y, w, h, picturename, player_x_speed, player_y_speed):
         GameSprite.__init__(self, x, y, w, h, picturename)
         self.x_speed = player_x_speed
         self.y_speed = player_y_speed
+        
     def fire (self):
         bullet = Bullet(self.rect.right, self.rect.centery, 40, 40, 'bomb.png', 3)
         bullets.add(bullet)
+        
     def update(self):
         self.rect.x += self.x_speed
         platforms_toched = sprite.spritecollide(self, walls, False)
@@ -42,11 +48,14 @@ class Player(GameSprite):
            self.rect.y = 0
         elif packman.rect.bottom > 500:
             self.rect.bottom = 500
+            
+            
 class Vrag (GameSprite):
     def __init__(self, x, y, w, h, picturename, speed):
         GameSprite.__init__(self, x, y, w, h, picturename)
         self.speed = speed
         self.direction = 'left'
+        
     def update(self):
         if self.direction == 'left':
             self.rect.x -= self.speed
@@ -56,14 +65,19 @@ class Vrag (GameSprite):
             self.direction = 'left'
         elif sprite.spritecollide(self, walls, False):
             self.direction = 'RIGHT'
+            
+            
 class Bullet (GameSprite):
     def __init__(self, x, y, w, h, picturename, speed):
         GameSprite.__init__(self, x, y, w, h, picturename)
         self.speed = speed
+        
     def update(self):
         self.rect.x += self.speed
         if self.rect.x > 700:
             self.kill()
+            
+            
 window = display.set_mode((700, 500))
 display.set_caption('Окно')
 run = True
@@ -86,6 +100,7 @@ walls.add(wall2)
 walls.add(wall4)
 walls.add(wall3)
 finish = False
+
 while run:
     for e in event.get():
         if e.type == QUIT:
